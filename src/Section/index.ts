@@ -1,0 +1,5 @@
+export * from './Bento'
+export * from './Contact'
+export * from './Footer'
+export * from './Home'
+export * from './Nav'

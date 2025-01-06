@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Lexend", sans-serif;
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+label,
+.icon {
+  @apply text-black dark:text-white font-medium;
+
+  &::selection {
+    @apply text-white bg-dark-background dark:text-black dark:bg-light-background font-medium;
+  }
+}
+
+.bento-social {
+  @apply w-7 h-7;
+
+  &.stroke {
+    @apply w-8 group-hover:scale-125 duration-200 stroke-black dark:stroke-white group-hover:stroke-blue-500;
+  }
+
+  &.fill {
+    @apply w-8 group-hover:scale-125 duration-200 fill-black dark:fill-white group-hover:fill-blue-500;
+  }
+}
+
+form {
+  @apply flex flex-col gap-5 mt-4;
+
+  div {
+    @apply flex flex-col;
+
+    label {
+      @apply m-2 opacity-75 duration-0 pointer-events-none absolute;
+    }
+
+    input,
+    textarea {
+      @apply bg-light-background dark:bg-dark-background border border-dark-background/25 dark:border-light-background/25 px-3 py-2 rounded-lg outline-0 duration-300 text-black dark:text-white;
+
+      &:valid {
+        @apply mt-9;
+        ~ label {
+          &.a::after {
+            content: "✔";
+            margin-left: 10px;
+          }
+        }
+      }
+
+      &:focus {
+        @apply border-blue-200 dark:border-teal-800 mt-9;
+        /* ~ label {
+        } */
+      }
+    }
+  }
+}
+
+.form-send-animation {
+  animation: form-anim 10s forwards linear;
+}
+
+@keyframes form-anim {
+  0% {
+    @apply w-full;
+  }
+  100% {
+    @apply w-0;
+  }
+}
