@@ -1,6 +1,6 @@
 import { BounceCards } from "./index";
 
-export const WorkIMG = () => {
+export const SkillIMG = () => {
   const images = [
     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=500&auto=format",
     "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format",
@@ -18,18 +18,15 @@ export const WorkIMG = () => {
   ];
 
   return (
-    <div className="flex justify-center items-center flex_col gap-12">
-      <BounceCards
-        className=""
-        images={images}
-        containerWidth={500}
-        containerHeight={500}
-        animationDelay={0}
-        animationStagger={0.08}
-        easeType="elastic.out(1, 0.5)"
-        transformStyles={transformStyles}
-      />
-
-    </div>
+    <BounceCards
+      className=""
+      images={images}
+      containerWidth={500}
+      containerHeight={500}
+      animationDelay={0}
+      animationStagger={0.08}
+      easeType="elastic.out(1, 0.5)"
+      transformStyles={transformStyles}
+    />
   );
 };

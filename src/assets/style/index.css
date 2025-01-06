@@ -39,6 +39,14 @@ label,
   }
 }
 
+section.group:has(.file) {
+  @apply relative flex flex-col items-center justify-center w-fit h-fit p-4;
+
+  .file {
+    @apply relative w-60 h-40 cursor-pointer origin-bottom [perspective:1500px] z-50;
+  }
+}
+
 form {
   @apply flex flex-col gap-5 mt-4;
 
@@ -82,5 +90,18 @@ form {
   }
   100% {
     @apply w-0;
+  }
+}
+
+.folder_away {
+  animation: folder-away 1s infinite ease-in-out;
+}
+
+@keyframes folder-away {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100vw);
   }
 }

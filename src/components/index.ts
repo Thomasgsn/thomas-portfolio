@@ -1,3 +1,7 @@
+export * from './Bento.filefolder'
+export * from './Bento.skill-img'
+export * from './Bento.personnal-img'
+export * from './Bento.work-img'
 export * from './BounceCards'
 export * from './Footer.Social'
 export * from './ThemeToggler'

@@ -1,41 +1,133 @@
+import { useRef, useState, useEffect } from "react";
+import { FileFolder, WorkIMG, SkillIMG, PersoIMG } from "@/components";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import gsap from "gsap";
+
 export const Bento = () => {
+  const [page, setPage] = useState<"home" | "work" | "skill" | "personnal">(
+    "home"
+  );
+
+  const folderRefs = useRef<HTMLDivElement[]>([]);
+  const workDivRef = useRef<HTMLDivElement>(null);
+  const skillDivRef = useRef<HTMLDivElement>(null);
+  const personnalDivRef = useRef<HTMLDivElement>(null);
+
+  const handleFolderClick = (newPage: "work" | "skill" | "personnal") => {
+    gsap.to(folderRefs.current, {
+      onComplete: () => {
+        setPage(newPage);
+      },
+      x: "-75vw",
+      duration: 1,
+      stagger: 0.1,
+      ease: "power3.inOut",
+    });
+  };
+
+  const handleBackToHome = () => {
+    const currentSection =
+      page === "work"
+        ? workDivRef.current
+        : page === "skill"
+        ? skillDivRef.current
+        : personnalDivRef.current;
+
+    gsap.to(currentSection, {
+      onStart: () => {
+        setTimeout(() => {
+          setPage("home");
+          gsap.fromTo(
+            folderRefs.current,
+            { x: "-75vw" },
+            {
+              x: "0vw",
+              duration: 1,
+              stagger: -0.1,
+              ease: "power3.inOut",
+            }
+          );
+        }, 500);
+      },
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      ease: "power3.inOut",
+    });
+  };
+
+  useEffect(() => {
+    const allSections = [
+      workDivRef.current,
+      skillDivRef.current,
+      personnalDivRef.current,
+    ];
+    gsap.set(allSections, { display: "hidden" });
+
+    if (page === "work") {
+      gsap.fromTo(
+        workDivRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0, ease: "power3.out" }
+      );
+    } else if (page === "skill") {
+      gsap.fromTo(
+        skillDivRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0, ease: "power3.out" }
+      );
+    } else if (page === "personnal") {
+      gsap.fromTo(
+        personnalDivRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0, ease: "power3.out" }
+      );
+    }
+  }, [page]);
+
   return (
-    <section className="border-b border-t border-dark-background dark:border-light-background bg-light-background dark:bg-dark-background flex justify-center items-center h-screen px-24">
-      <div className="bg-red-500/25 w-1/3 h-[80%] flex justify-center">
-        <section className="relative group flex flex-col items-center justify-center w-fit h-fit p-4">
-          <div className="file relative w-60 h-40 cursor-pointer origin-bottom [perspective:1500px] z-50">
-            <div className="work-5 bg-amber-600 w-full h-full origin-top rounded-2xl rounded-tl-none group-hover:shadow-[0_20px_40px_rgba(0,0,0,.2)] transition-all ease duration-300 relative after:absolute after:content-[''] after:bottom-[99%] after:left-0 after:w-20 after:h-4 after:bg-amber-600 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[15px] before:left-[75.5px] before:w-4 before:h-4 before:bg-amber-600 before:[clip-path:polygon(0_35%,0%_100%,50%_100%);]"></div>
-            <div className="work-4 absolute inset-1 bg-zinc-400 rounded-2xl transition-all ease duration-300 origin-bottom select-none group-hover:[transform:rotateX(-20deg)]"></div>
-            <div className="work-3 absolute inset-1 bg-zinc-300 rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-30deg)]"></div>
-            <div className="work-2 absolute inset-1 bg-zinc-200 rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-38deg)]"></div>
-            <div className="work-1 absolute bottom-0 bg-gradient-to-t from-amber-500 to-amber-400 w-full h-[156px] rounded-2xl rounded-tr-none after:absolute after:content-[''] after:bottom-[99%] after:right-0 after:w-[146px] after:h-[16px] after:bg-amber-400 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[10px] before:right-[142px] before:size-3 before:bg-amber-400 before:[clip-path:polygon(100%_14%,50%_100%,100%_100%);] transition-all ease duration-300 origin-bottom flex items-end group-hover:shadow-[inset_0_20px_40px_#fbbf24,_inset_0_-20px_40px_#d97706] group-hover:[transform:rotateX(-46deg)_translateY(1px)]"></div>
-          </div>
-          <p className="text-3xl pt-4 opacity-30">See my work</p>
-        </section>
+    <section className="relative border-b border-t border-dark-background dark:border-light-background bg-light-background dark:bg-dark-background flex justify-center items-center h-screen px-24 gap-10">
+      <button
+        className={`${
+          page == "home" ? "hidden" : "block absolute top-32 left-32 z-50"
+        }`}
+        onClick={handleBackToHome}
+      >
+        <p>
+          <FaArrowLeftLong />
+        </p>
+      </button>
+      <div
+        className="z-30"
+        ref={(el) => (folderRefs.current[0] = el!)}
+        onClick={() => handleFolderClick("work")}
+      >
+        <FileFolder text={"See my work"} />
       </div>
-      <div className="bg-blue-500/25 w-1/3 h-[80%]">
-        <section className="relative group flex flex-col items-center justify-center w-fit h-fit p-4">
-          <div className="file relative w-60 h-40 cursor-pointer origin-bottom [perspective:1500px] z-50">
-            <div className="work-5 bg-amber-600 w-full h-full origin-top rounded-2xl rounded-tl-none group-hover:shadow-[0_20px_40px_rgba(0,0,0,.2)] transition-all ease duration-300 relative after:absolute after:content-[''] after:bottom-[99%] after:left-0 after:w-20 after:h-4 after:bg-amber-600 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[15px] before:left-[75.5px] before:w-4 before:h-4 before:bg-amber-600 before:[clip-path:polygon(0_35%,0%_100%,50%_100%);]"></div>
-            <div className="work-4 absolute inset-1 bg-zinc-400 rounded-2xl transition-all ease duration-300 origin-bottom select-none group-hover:[transform:rotateX(-20deg)]"></div>
-            <div className="work-3 absolute inset-1 bg-zinc-300 rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-30deg)]"></div>
-            <div className="work-2 absolute inset-1 bg-zinc-200 rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-38deg)]"></div>
-            <div className="work-1 absolute bottom-0 bg-gradient-to-t from-amber-500 to-amber-400 w-full h-[156px] rounded-2xl rounded-tr-none after:absolute after:content-[''] after:bottom-[99%] after:right-0 after:w-[146px] after:h-[16px] after:bg-amber-400 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[10px] before:right-[142px] before:size-3 before:bg-amber-400 before:[clip-path:polygon(100%_14%,50%_100%,100%_100%);] transition-all ease duration-300 origin-bottom flex items-end group-hover:shadow-[inset_0_20px_40px_#fbbf24,_inset_0_-20px_40px_#d97706] group-hover:[transform:rotateX(-46deg)_translateY(1px)]"></div>
-          </div>
-          <p className="text-3xl pt-4 opacity-30">See my skills</p>
-        </section>
+      <div
+        className="z-30"
+        ref={(el) => (folderRefs.current[1] = el!)}
+        onClick={() => handleFolderClick("skill")}
+      >
+        <FileFolder text={"See my skills"} />
       </div>
-      <div className="bg-green-500/25 w-1/3 h-[80%]">
-        <section className="relative group flex flex-col items-center justify-center w-fit h-fit p-4">
-          <div className="file relative w-60 h-40 cursor-pointer origin-bottom [perspective:1500px] z-50">
-            <div className="work-5 bg-amber-600 w-full h-full origin-top rounded-2xl rounded-tl-none group-hover:shadow-[0_20px_40px_rgba(0,0,0,.2)] transition-all ease duration-300 relative after:absolute after:content-[''] after:bottom-[99%] after:left-0 after:w-20 after:h-4 after:bg-amber-600 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[15px] before:left-[75.5px] before:w-4 before:h-4 before:bg-amber-600 before:[clip-path:polygon(0_35%,0%_100%,50%_100%);]"></div>
-            <div className="work-4 absolute inset-1 bg-[url(/dark.png)] bg-cover rounded-2xl transition-all ease duration-300 origin-bottom select-none group-hover:[transform:rotateX(-20deg)]"></div>
-            <div className="work-3 absolute inset-1 bg-[url(/dark.png)] bg-cover rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-30deg)]"></div>
-            <div className="work-2 absolute inset-1 bg-[url(/dark.png)] bg-cover rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-38deg)]"></div>
-            <div className="work-1 absolute bottom-0 bg-gradient-to-t from-amber-500 to-amber-400 w-full h-[156px] rounded-2xl rounded-tr-none after:absolute after:content-[''] after:bottom-[99%] after:right-0 after:w-[146px] after:h-[16px] after:bg-amber-400 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[10px] before:right-[142px] before:size-3 before:bg-amber-400 before:[clip-path:polygon(100%_14%,50%_100%,100%_100%);] transition-all ease duration-300 origin-bottom flex items-end group-hover:shadow-[inset_0_20px_40px_#fbbf24,_inset_0_-20px_40px_#d97706] group-hover:[transform:rotateX(-46deg)_translateY(1px)]"></div>
-          </div>
-          <p className="text-3xl pt-4 opacity-30">About me</p>
-        </section>
+      <div
+        className="z-30"
+        ref={(el) => (folderRefs.current[2] = el!)}
+        onClick={() => handleFolderClick("personnal")}
+      >
+        <FileFolder text={"About me"} />
+      </div>
+
+      {/* Sections associées */}
+      <div ref={workDivRef} className={`work w-52 h-52 absolute`}>
+        {page == "work" ? <WorkIMG /> : <></>}
+      </div>
+      <div ref={skillDivRef} className={`skill w-52 h-52 absolute`}>
+        {page == "skill" ? <SkillIMG /> : <></>}
+      </div>
+      <div ref={personnalDivRef} className={`personnal w-52 h-52 absolute`}>
+        {page == "personnal" ? <PersoIMG /> : <></>}
       </div>
     </section>
   );
